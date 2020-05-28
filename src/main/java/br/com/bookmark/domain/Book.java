@@ -3,12 +3,16 @@ package br.com.bookmark.domain;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -43,5 +47,13 @@ public class Book implements Serializable {
     private String synopsis;
 
     private String cover;
+
+    @CreationTimestamp
+    @FutureOrPresent
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @FutureOrPresent
+    private LocalDateTime updatedAt;
 
 }
