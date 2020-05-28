@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.validator.constraints.ISBN;
 
 import javax.persistence.*;
 import javax.validation.constraints.FutureOrPresent;
@@ -41,6 +42,9 @@ public class Book implements Serializable {
 
     @Size(max = 100)
     private String publisher;
+
+    @ISBN
+    private String isbn;
 
     @Lob
     @Size(max = 500)

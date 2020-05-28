@@ -19,7 +19,7 @@ import java.util.Arrays;
 @Configuration
 @Profile("test")
 @RequiredArgsConstructor
-public class TestConfig implements CommandLineRunner {
+public class    TestConfig implements CommandLineRunner {
 
     private final UserRepository userRepository;
     private final BookRepository bookRepository;
@@ -33,8 +33,8 @@ public class TestConfig implements CommandLineRunner {
 
         userRepository.saveAll(Arrays.asList(user1, user2));
 
-        Book book1 = new Book(null, "Harry Potter e a Pedra Filosofal", Arrays.asList("JK Rowling"), Arrays.asList("Ficção"), "Rocco", null, null, null, null, null);
-        Book book2 = new Book(null, "Harry Potter e a Câmara Secreta", Arrays.asList("JK Rowling"), Arrays.asList("Ficção"), "Rocco", null, null, null, null, null);
+        Book book1 = new Book(null, "Harry Potter e a Pedra Filosofal", Arrays.asList("JK Rowling"), Arrays.asList("Ficção"), "Rocco", null, null, null, null, null, null);
+        Book book2 = new Book(null, "Harry Potter e a Câmara Secreta", Arrays.asList("JK Rowling"), Arrays.asList("Ficção"), "Rocco", null, null, null, null, null, null );
 
         bookRepository.saveAll(Arrays.asList(book1, book2));
 
