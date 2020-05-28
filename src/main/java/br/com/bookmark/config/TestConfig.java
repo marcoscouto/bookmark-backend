@@ -6,6 +6,7 @@ import br.com.bookmark.domain.User;
 import br.com.bookmark.domain.enums.Permission;
 import br.com.bookmark.domain.id.BookmarkId;
 import br.com.bookmark.repository.BookRepository;
+import br.com.bookmark.repository.BookmarkRepository;
 import br.com.bookmark.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
@@ -22,6 +23,7 @@ public class TestConfig implements CommandLineRunner {
 
     private final UserRepository userRepository;
     private final BookRepository bookRepository;
+    private final BookmarkRepository bookmarkRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -39,6 +41,7 @@ public class TestConfig implements CommandLineRunner {
         Bookmark bookmark1 = new Bookmark(new BookmarkId(user1, book1), 22, null, false, false, null, null);
         Bookmark bookmark2 = new Bookmark(new BookmarkId(user2, book2), 33, null, false, false, null, null);
 
+        bookmarkRepository.saveAll(Arrays.asList(bookmark1, bookmark2));
 
     }
 
