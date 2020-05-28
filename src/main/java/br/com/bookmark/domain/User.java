@@ -27,7 +27,7 @@ import java.util.UUID;
 public class User implements Serializable {
 
     @Id
-    @GeneratedValue(generator = "UUID", strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator = "UUID")
     private UUID id;
 
     @NotBlank
@@ -50,7 +50,7 @@ public class User implements Serializable {
     @DateTimeFormat
     private LocalDate birthDate;
 
-    @NotBlank
+    @NotNull
     private Permission permission;
 
     @Size(max = 255)
