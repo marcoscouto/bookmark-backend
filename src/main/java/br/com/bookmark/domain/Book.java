@@ -1,5 +1,6 @@
 package br.com.bookmark.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -55,5 +56,9 @@ public class Book implements Serializable {
     @UpdateTimestamp
     @FutureOrPresent
     private LocalDateTime updatedAt;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "id.book")
+    private List<Bookmark> bookmarks;
 
 }

@@ -1,6 +1,7 @@
 package br.com.bookmark.domain;
 
 import br.com.bookmark.domain.enums.Permission;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jdk.jfr.Timestamp;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,6 +16,7 @@ import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -37,6 +39,7 @@ public class User implements Serializable {
     @Column(unique = true)
     private String email;
 
+    @JsonIgnore
     @NotBlank
     @Size(min = 6, max = 50)
     private String password;
@@ -60,4 +63,8 @@ public class User implements Serializable {
     @UpdateTimestamp
     @FutureOrPresent
     private LocalDateTime updatedAt;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "id.user")
+    private List<Bookmark> bookmarks;
 }
