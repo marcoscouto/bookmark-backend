@@ -44,4 +44,9 @@ public class UserService implements UserServiceInterface {
         findById(id);
         repository.deleteById(id);
     }
+
+    @Override
+    public User findByEmail(String email) {
+        return repository.findByEmail(email).orElseThrow(() -> new NotFoundException("User not founded. Email: " + email));
+    }
 }
