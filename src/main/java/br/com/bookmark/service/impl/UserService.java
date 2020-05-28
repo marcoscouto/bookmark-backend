@@ -23,7 +23,8 @@ public class UserService implements UserServiceInterface {
 
     @Override
     public User findById(UUID id) {
-        return repository.findById(id).orElseThrow(() -> new NotFoundException("User not founded. Id: " + id ));
+        return repository.findById(id)
+                .orElseThrow(() -> new NotFoundException("User not founded. Id: " + id ));
     }
 
     @Override
