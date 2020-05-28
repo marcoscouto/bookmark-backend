@@ -3,6 +3,7 @@ package br.com.bookmark.domain;
 import br.com.bookmark.domain.enums.Permission;
 import jdk.jfr.Timestamp;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "tb_users")
