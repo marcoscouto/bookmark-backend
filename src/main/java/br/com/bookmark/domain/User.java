@@ -41,7 +41,6 @@ public class User implements Serializable {
     @Size(min = 6, max = 50)
     private String password;
 
-
     private String gender;
 
     @Past
