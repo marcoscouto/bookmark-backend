@@ -9,12 +9,14 @@ public interface BookmarkServiceInterface {
 
     List<Bookmark> findAll();
 
-    Bookmark findById(UUID id);
+    List<Bookmark> findByUserId(UUID userId);
+
+    Bookmark findByUserIdAndBookId(UUID userId, UUID bookId);
 
     Bookmark save(Bookmark bookmark);
 
-    Bookmark update(UUID id, Bookmark bookmark);
+    Bookmark update(UUID userId, UUID bookId, Bookmark bookmark);
 
-    void delete(UUID id);
+    void delete(UUID userId, UUID bookId);
 
 }

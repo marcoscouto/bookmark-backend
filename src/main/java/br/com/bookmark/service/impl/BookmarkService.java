@@ -1,6 +1,7 @@
 package br.com.bookmark.service.impl;
 
 import br.com.bookmark.domain.Bookmark;
+import br.com.bookmark.domain.id.BookmarkId;
 import br.com.bookmark.exception.NotFoundException;
 import br.com.bookmark.repository.BookmarkRepository;
 import br.com.bookmark.service.BookmarkServiceInterface;
@@ -22,8 +23,13 @@ public class BookmarkService implements BookmarkServiceInterface {
     }
 
     @Override
-    public Bookmark findById(UUID id) {
-        return repository.findById(id).orElseThrow(() -> new NotFoundException("Bookmark não encontrado. Id: " + id));
+    public List<Bookmark> findByUserId(UUID userId) {
+        return repository.findByIdUserId(userId);
+    }
+
+    @Override
+    public Bookmark findByUserIdAndBookId(UUID userId, UUID bookId) {
+        return repository.findByIdUserIdAndIdBookId(userId, bookId).orElseThrow(() -> new NotFoundException("Bookmark not founded"));
     }
 
     @Override
@@ -33,13 +39,13 @@ public class BookmarkService implements BookmarkServiceInterface {
     }
 
     @Override
-    public Bookmark update(UUID id, Bookmark bookmark) {
-        bookmark.setId(findById(id).getId());
+    public Bookmark update(UUID userId, UUID bookId, Bookmark bookmark) {
+        bookmark.setId(findByUserIdAndBookId(userId, bookId).getId());
         return repository.save(bookmark);
     }
 
     @Override
-    public void delete(UUID id) {
-        repository.deleteById(id);
+    public void delete(UUID userId, UUID bookId) {
+        repository.deleteByIdUserIdAndIdBookId(userId, bookId);
     }
 }
