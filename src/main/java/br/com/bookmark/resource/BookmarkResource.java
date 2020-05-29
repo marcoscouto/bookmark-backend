@@ -28,7 +28,7 @@ public class BookmarkResource {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @PutMapping("/{userId}/{bookId")
+    @PutMapping("/{userId}/{bookId}")
     public ResponseEntity<Bookmark> update(@PathVariable UUID userId, @PathVariable UUID bookId, @RequestBody Bookmark bookmark){
         Bookmark response = service.update(userId, bookId, bookmark);
         return ResponseEntity.ok(response);
