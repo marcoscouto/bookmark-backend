@@ -5,6 +5,9 @@ import br.com.bookmark.exception.NotFoundException;
 import br.com.bookmark.repository.BookRepository;
 import br.com.bookmark.service.BookServiceInterface;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,11 +17,19 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class BookService implements BookServiceInterface {
 
+    private final int ITEMS_PER_PAGE = 10;
+
     private final BookRepository repository;
 
     @Override
     public List<Book> findAll() {
         return repository.findAll();
+    }
+
+    @Override
+    public Page<Book> findAll(String orderBy, Integer page) {
+        PageRequest pageRequest = PageRequest.of(page, ITEMS_PER_PAGE, Sort.by(Sort.Direction.DESC, orderBy));
+        return repository.findAll(pageRequest);
     }
 
     @Override

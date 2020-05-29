@@ -3,6 +3,8 @@ package br.com.bookmark.resource;
 import br.com.bookmark.domain.Book;
 import br.com.bookmark.service.impl.BookService;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +22,14 @@ public class BookResource {
     @GetMapping
     public ResponseEntity<List<Book>> findAll(){
         List<Book> response = service.findAll();
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/page/{page}")
+    public ResponseEntity<Page<Book>> findAll(
+            @PathVariable(value = "page", required = false) Integer page,
+            @RequestParam(value = "order", defaultValue = "createdAt") String orderBy){
+        Page<Book> response = service.findAll(orderBy, page);
         return ResponseEntity.ok(response);
     }
 
