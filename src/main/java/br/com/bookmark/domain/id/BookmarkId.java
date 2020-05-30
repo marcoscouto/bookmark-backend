@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import java.io.Serializable;
 
@@ -17,9 +18,11 @@ import java.io.Serializable;
 public class BookmarkId implements Serializable {
 
     @ManyToOne
+    @JoinColumn(name = "user")
     private User user;
 
     @ManyToOne
+    @JoinColumn(name = "book")
     private Book book;
 
 }

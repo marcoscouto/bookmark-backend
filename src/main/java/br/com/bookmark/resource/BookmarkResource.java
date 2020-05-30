@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -16,6 +17,12 @@ import java.util.UUID;
 public class BookmarkResource {
 
     private final BookmarkService service;
+
+    @GetMapping
+    public ResponseEntity<List<Bookmark>> findAll(){
+        List<Bookmark> response = service.findAll();
+        return ResponseEntity.ok(response);
+    }
 
     @GetMapping("/{userId}/{bookId}")
     public ResponseEntity<Bookmark> findById(@PathVariable UUID userId, @PathVariable UUID bookId){
@@ -33,10 +40,10 @@ public class BookmarkResource {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping
-    public ResponseEntity<Bookmark> save(@RequestBody Bookmark bookmark){
-        Bookmark response = service.save(bookmark);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    @PostMapping("/{userId}/{bookId}")
+    public ResponseEntity<Bookmark> save(@PathVariable UUID userId, @PathVariable UUID bookId, @RequestBody Bookmark bookmark){
+        Bookmark response = service.save(userId, bookId, bookmark);
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{userId}/{bookId}")

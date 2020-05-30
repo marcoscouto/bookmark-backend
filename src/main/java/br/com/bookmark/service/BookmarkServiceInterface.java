@@ -17,7 +17,7 @@ public interface BookmarkServiceInterface {
 
     Page<Bookmark> findByIdUserIdAndIsWishList(UUID userId, Boolean isWishList, Integer page);
 
-    Bookmark save(Bookmark bookmark);
+    Bookmark save(UUID userId, UUID bookId, Bookmark bookmark);
 
     Bookmark update(UUID userId, UUID bookId, Bookmark bookmark);
 
