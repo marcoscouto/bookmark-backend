@@ -2,6 +2,7 @@ package br.com.bookmark.service;
 
 import br.com.bookmark.domain.Book;
 import org.springframework.data.domain.Page;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
@@ -14,7 +15,7 @@ public interface BookServiceInterface {
 
     Book findById(UUID id);
 
-    Book save(Book book);
+    Book save(Book book, MultipartFile cover);
 
     Book update(UUID id, Book book);
 

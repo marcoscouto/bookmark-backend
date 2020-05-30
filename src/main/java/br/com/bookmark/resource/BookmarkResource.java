@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
@@ -21,6 +22,12 @@ public class BookmarkResource {
     @GetMapping
     public ResponseEntity<List<Bookmark>> findAll(){
         List<Bookmark> response = service.findAll();
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<List<Bookmark>> findByUserId(@PathVariable UUID userId){
+        List<Bookmark> response = service.findByUserId(userId);
         return ResponseEntity.ok(response);
     }
 

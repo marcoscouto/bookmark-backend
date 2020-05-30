@@ -2,12 +2,14 @@ package br.com.bookmark.resource;
 
 import br.com.bookmark.domain.Book;
 import br.com.bookmark.service.impl.BookService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
@@ -40,8 +42,10 @@ public class BookResource {
     }
 
     @PostMapping
-    public ResponseEntity<Book> save(@RequestBody Book book){
-        Book response = service.save(book);
+    public ResponseEntity<Book> save(@RequestParam String book, @RequestParam MultipartFile cover) throws JsonProcessingException {
+        ObjectMapper obj = new ObjectMapper();
+        Book response = obj.readValue(book, Book.class);
+        response = service.save(response, cover);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 

@@ -4,12 +4,16 @@ import br.com.bookmark.domain.Book;
 import br.com.bookmark.exception.NotFoundException;
 import br.com.bookmark.repository.BookRepository;
 import br.com.bookmark.service.BookServiceInterface;
+import br.com.bookmark.utils.UploadImageS3;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,6 +24,7 @@ public class BookService implements BookServiceInterface {
     private final int ITEMS_PER_PAGE = 10;
 
     private final BookRepository repository;
+    private final UploadImageS3 s3;
 
     @Override
     public List<Book> findAll() {
@@ -38,10 +43,13 @@ public class BookService implements BookServiceInterface {
                 .orElseThrow(() -> new NotFoundException("Book not founded. Id: " + id));
     }
 
+    @Transactional
     @Override
-    public Book save(Book book) {
+    public Book save(Book book, MultipartFile cover) {
         book.setId(null);
         book.setIsbn(book.getIsbn().replace("-", ""));
+        URI uri = s3.uploadFile(cover, book.getIsbn(), "book");
+        book.setCover(uri);
         return repository.save(book);
     }
 

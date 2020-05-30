@@ -13,6 +13,7 @@ import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -52,7 +53,7 @@ public class Book implements Serializable {
     @Size(max = 500)
     private String synopsis;
 
-    private String cover;
+    private URI cover;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
