@@ -1,7 +1,9 @@
 package br.com.bookmark.domain;
 
+import br.com.bookmark.domain.dto.SignUp;
 import br.com.bookmark.domain.enums.Permission;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -38,6 +40,7 @@ public class User implements Serializable {
     private String email;
 
     @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotBlank
     @Size(min = 6, max = 50)
     private String password;
@@ -65,4 +68,10 @@ public class User implements Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "id.user")
     private List<Bookmark> bookmarks;
+
+    public User(SignUp signUp){
+        this.setName(signUp.getName());
+        this.setEmail(signUp.getEmail());
+        this.setPassword(signUp.getPassword());
+    }
 }

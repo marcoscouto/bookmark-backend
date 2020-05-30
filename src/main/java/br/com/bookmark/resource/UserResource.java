@@ -1,6 +1,7 @@
 package br.com.bookmark.resource;
 
 import br.com.bookmark.domain.User;
+import br.com.bookmark.domain.dto.SignUp;
 import br.com.bookmark.service.impl.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,8 +31,8 @@ public class UserResource {
     }
 
     @PostMapping
-    public ResponseEntity<User> save(@RequestBody User user){
-        User response = userService.save(user);
+    public ResponseEntity<User> save(@RequestBody SignUp signUp){
+        User response = userService.save(new User(signUp));
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 

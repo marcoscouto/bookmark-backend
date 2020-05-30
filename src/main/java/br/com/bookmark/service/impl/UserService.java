@@ -1,6 +1,7 @@
 package br.com.bookmark.service.impl;
 
 import br.com.bookmark.domain.User;
+import br.com.bookmark.domain.enums.Permission;
 import br.com.bookmark.exception.NotFoundException;
 import br.com.bookmark.repository.UserRepository;
 import br.com.bookmark.service.UserServiceInterface;
@@ -30,6 +31,7 @@ public class UserService implements UserServiceInterface {
     @Override
     public User save(User user) {
         user.setId(null);
+        user.setPermission(Permission.USER);
         return repository.save(user);
     }
 
