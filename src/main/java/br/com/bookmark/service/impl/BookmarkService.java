@@ -6,6 +6,9 @@ import br.com.bookmark.exception.NotFoundException;
 import br.com.bookmark.repository.BookmarkRepository;
 import br.com.bookmark.service.BookmarkServiceInterface;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +17,8 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class BookmarkService implements BookmarkServiceInterface {
+
+    private final int ITEMS_PER_PAGE = 10;
 
     private final BookmarkRepository repository;
 
@@ -30,6 +35,12 @@ public class BookmarkService implements BookmarkServiceInterface {
     @Override
     public Bookmark findByUserIdAndBookId(UUID userId, UUID bookId) {
         return repository.findByIdUserIdAndIdBookId(userId, bookId).orElseThrow(() -> new NotFoundException("Bookmark not founded"));
+    }
+
+    @Override
+    public Page<Bookmark> findByIdUserIdAndIsWishList(UUID userId, Boolean isWishList , Integer page) {
+        PageRequest pageRequest = PageRequest.of(page, ITEMS_PER_PAGE, Sort.by(Sort.Direction.DESC, "updatedAt" ));
+        return repository.findByIdUserIdAndIsWishList(userId, isWishList, pageRequest);
     }
 
     @Override

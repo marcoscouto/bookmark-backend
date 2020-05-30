@@ -47,6 +47,7 @@ public class UserService implements UserServiceInterface {
 
     @Override
     public User findByEmail(String email) {
-        return repository.findByEmail(email).orElseThrow(() -> new NotFoundException("User not founded. Email: " + email));
+        return repository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException("User not founded. Email: " + email));
     }
 }

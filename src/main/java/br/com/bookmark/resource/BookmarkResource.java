@@ -3,6 +3,7 @@ package br.com.bookmark.resource;
 import br.com.bookmark.domain.Bookmark;
 import br.com.bookmark.service.impl.BookmarkService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,16 @@ public class BookmarkResource {
     @GetMapping("/{userId}/{bookId}")
     public ResponseEntity<Bookmark> findById(@PathVariable UUID userId, @PathVariable UUID bookId){
         Bookmark response = service.findByUserIdAndBookId(userId, bookId);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{userId}/page/{page}/{isWishList}")
+    public ResponseEntity<Page<Bookmark>> findByIdIsWishListOrBookmark(
+            @PathVariable UUID userId,
+            @PathVariable Integer page,
+            @PathVariable Boolean isWishList
+    ){
+        Page<Bookmark> response = service.findByIdUserIdAndIsWishList(userId, isWishList, page);
         return ResponseEntity.ok(response);
     }
 
