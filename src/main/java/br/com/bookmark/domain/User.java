@@ -58,7 +58,6 @@ public class User implements Serializable {
     private String profilePicture;
 
     @CreationTimestamp
-    @FutureOrPresent
     private LocalDateTime createdAt;
 
     @UpdateTimestamp

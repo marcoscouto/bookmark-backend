@@ -36,9 +36,12 @@ public class UserService implements UserServiceInterface {
     }
 
     @Override
-    public User update(UUID id, User user) {
-        user.setId(findById(id).getId());
-        return repository.save(user);
+    public User update(UUID id, User newUser) {
+        User user = findById(id);
+        newUser.setId(user.getId());
+        newUser.setPermission(user.getPermission());
+        newUser.setCreatedAt(user.getCreatedAt());
+        return repository.save(newUser);
     }
 
     @Override

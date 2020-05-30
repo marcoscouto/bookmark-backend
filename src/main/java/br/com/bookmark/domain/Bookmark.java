@@ -39,7 +39,6 @@ public class Bookmark implements Serializable {
     private Boolean isWishList;
 
     @CreationTimestamp
-    @FutureOrPresent
     private LocalDateTime createdAt;
 
     @UpdateTimestamp

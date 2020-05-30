@@ -53,7 +53,6 @@ public class Book implements Serializable {
     private String cover;
 
     @CreationTimestamp
-    @FutureOrPresent
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
