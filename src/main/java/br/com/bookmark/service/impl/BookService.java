@@ -41,13 +41,17 @@ public class BookService implements BookServiceInterface {
     @Override
     public Book save(Book book) {
         book.setId(null);
+        book.setIsbn(book.getIsbn().replace("-", ""));
         return repository.save(book);
     }
 
     @Override
-    public Book update(UUID id, Book book) {
-        book.setId(findById(id).getId());
-        return repository.save(book);
+    public Book update(UUID id, Book newBook) {
+        Book book = findById(id);
+        newBook.setId(book.getId());
+        newBook.setCreatedAt(book.getCreatedAt());
+        newBook.setIsbn(newBook.getIsbn().replace("-", ""));
+        return repository.save(newBook);
     }
 
     @Override

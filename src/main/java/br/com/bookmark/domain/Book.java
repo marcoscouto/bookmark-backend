@@ -44,6 +44,8 @@ public class Book implements Serializable {
     private String publisher;
 
     @ISBN
+    @NotBlank
+    @Column(unique = true)
     private String isbn;
 
     @Lob
