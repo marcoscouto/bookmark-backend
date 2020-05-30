@@ -43,22 +43,28 @@ public class BookService implements BookServiceInterface {
                 .orElseThrow(() -> new NotFoundException("Book not founded. Id: " + id));
     }
 
-    @Transactional
     @Override
     public Book save(Book book, MultipartFile cover) {
         book.setId(null);
         book.setIsbn(book.getIsbn().replace("-", ""));
-        URI uri = s3.uploadFile(cover, book.getIsbn(), "book");
-        book.setCover(uri);
+        if (cover != null) {
+            URI uri = s3.uploadFile(cover, book.getIsbn(), "book");
+            book.setCover(uri);
+        }
         return repository.save(book);
     }
 
     @Override
-    public Book update(UUID id, Book newBook) {
+    public Book update(UUID id, Book newBook, MultipartFile cover) {
         Book book = findById(id);
         newBook.setId(book.getId());
         newBook.setCreatedAt(book.getCreatedAt());
         newBook.setIsbn(newBook.getIsbn().replace("-", ""));
+        newBook.setCover(book.getCover());
+        if (cover != null) {
+            URI uri = s3.uploadFile(cover, book.getIsbn(), "book");
+            book.setCover(uri);
+        }
         return repository.save(newBook);
     }
 
@@ -67,4 +73,6 @@ public class BookService implements BookServiceInterface {
         findById(id);
         repository.deleteById(id);
     }
+
+
 }

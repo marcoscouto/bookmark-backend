@@ -22,7 +22,7 @@ public class BookResource {
     private final BookService service;
 
     @GetMapping
-    public ResponseEntity<List<Book>> findAll(){
+    public ResponseEntity<List<Book>> findAll() {
         List<Book> response = service.findAll();
         return ResponseEntity.ok(response);
     }
@@ -30,33 +30,43 @@ public class BookResource {
     @GetMapping("/page/{page}")
     public ResponseEntity<Page<Book>> findAll(
             @PathVariable(value = "page", required = false) Integer page,
-            @RequestParam(value = "order", defaultValue = "createdAt") String orderBy){
+            @RequestParam(value = "order", defaultValue = "createdAt") String orderBy) {
         Page<Book> response = service.findAll(orderBy, page);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Book> findById(@PathVariable UUID id){
+    public ResponseEntity<Book> findById(@PathVariable UUID id) {
         Book response = service.findById(id);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping
-    public ResponseEntity<Book> save(@RequestParam String book, @RequestParam MultipartFile cover) throws JsonProcessingException {
-        ObjectMapper obj = new ObjectMapper();
-        Book response = obj.readValue(book, Book.class);
-        response = service.save(response, cover);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    public ResponseEntity<Book> save(@RequestParam String book, @RequestParam(required = false) MultipartFile cover) {
+        try {
+            ObjectMapper obj = new ObjectMapper();
+            Book response = obj.readValue(book, Book.class);
+            response = service.save(response, cover);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (JsonProcessingException e) {
+            return ResponseEntity.status(500).build();
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Book> update(@PathVariable UUID id, @RequestBody Book book){
-        Book response = service.update(id, book);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<Book> update(@PathVariable UUID id, @RequestParam String book, @RequestParam(required = false) MultipartFile cover) {
+        try {
+            ObjectMapper obj = new ObjectMapper();
+            Book response = obj.readValue(book, Book.class);
+            response = service.update(id, response, cover);
+            return ResponseEntity.ok(response);
+        } catch (JsonProcessingException e) {
+            return ResponseEntity.status(500).build();
+        }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable UUID id){
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
         service.delete(id);
         return ResponseEntity.ok().build();
     }

@@ -27,12 +27,11 @@ public class UploadImageS3 {
 
     public URI uploadFile(MultipartFile multipartFile, String imageName, String folder) {
         try {
-            if(multipartFile.getSize() > 2000000)
-                throw new FileException("Max size file is 2MB, this file have " + (multipartFile.getSize()/1000000) + "MB");
+            if (multipartFile.getSize() > 2000000)
+                throw new FileException("Max size file is 2MB, this file have " + (multipartFile.getSize() / 1000000) + "MB");
             InputStream is = multipartFile.getInputStream();
             ObjectMetadata meta = new ObjectMetadata();
             meta.setContentType(multipartFile.getContentType());
-            System.out.println(s3Client);
             s3Client.putObject(getBucketFolder(folder), imageName, is, meta);
             return s3Client.getUrl(getBucketFolder(folder), imageName).toURI();
         } catch (IOException | URISyntaxException e) {
@@ -40,10 +39,10 @@ public class UploadImageS3 {
         }
     }
 
-    private String getBucketFolder(String type){
-        if(type == "book")
+    private String getBucketFolder(String type) {
+        if (type == "book")
             return bucketCovers;
-        if(type =="profile")
+        if (type == "profile")
             return bucketProfiles;
         throw new FileException("Bucket Folder not founded");
     }

@@ -17,7 +17,7 @@ public interface BookServiceInterface {
 
     Book save(Book book, MultipartFile cover);
 
-    Book update(UUID id, Book book);
+    Book update(UUID id, Book book, MultipartFile cover);
 
     void delete(UUID id);
 
