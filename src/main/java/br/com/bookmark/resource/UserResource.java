@@ -1,13 +1,18 @@
 package br.com.bookmark.resource;
 
+import br.com.bookmark.domain.Book;
 import br.com.bookmark.domain.User;
 import br.com.bookmark.domain.dto.SignUp;
 import br.com.bookmark.service.impl.UserService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,15 +36,27 @@ public class UserResource {
     }
 
     @PostMapping
-    public ResponseEntity<User> save(@RequestBody SignUp signUp){
-        User response = userService.save(new User(signUp));
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    public ResponseEntity<User> save(@RequestParam String user, @RequestParam(required = false) MultipartFile profile){
+        try {
+            ObjectMapper obj = new ObjectMapper();
+            SignUp response = obj.readValue(user, SignUp.class);
+            User userResponse = userService.save(new User(response), profile);
+            return ResponseEntity.status(HttpStatus.CREATED).body(userResponse);
+        } catch (JsonProcessingException | NoSuchAlgorithmException e) {
+            return ResponseEntity.status(500).build();
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> update(@PathVariable UUID id, @RequestBody User user){
-        User response = userService.update(id, user);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<User> update(@PathVariable UUID id, @RequestParam String user, @RequestParam(required = false) MultipartFile profile){
+        try {
+            ObjectMapper obj = new ObjectMapper();
+            User response = obj.readValue(user, User.class);
+            response = userService.update(id, response, profile);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (JsonProcessingException e) {
+            return ResponseEntity.status(500).build();
+        }
     }
 
     @DeleteMapping("/{id}")

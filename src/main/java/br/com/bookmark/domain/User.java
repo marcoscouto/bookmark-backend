@@ -4,6 +4,10 @@ import br.com.bookmark.domain.dto.SignUp;
 import br.com.bookmark.domain.enums.Permission;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,6 +18,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -48,14 +53,14 @@ public class User implements Serializable {
     private String gender;
 
     @Past
-    @DateTimeFormat
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate birthDate;
 
     @NotNull
     private Permission permission;
 
-    @Size(max = 255)
-    private String profilePicture;
+    private URI profilePicture;
 
     @CreationTimestamp
     private LocalDateTime createdAt;

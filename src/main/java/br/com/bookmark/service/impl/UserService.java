@@ -5,9 +5,14 @@ import br.com.bookmark.domain.enums.Permission;
 import br.com.bookmark.exception.NotFoundException;
 import br.com.bookmark.repository.UserRepository;
 import br.com.bookmark.service.UserServiceInterface;
+import br.com.bookmark.utils.UploadImageS3;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.net.URI;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,6 +21,7 @@ import java.util.UUID;
 public class UserService implements UserServiceInterface {
 
     private final UserRepository repository;
+    private final UploadImageS3 s3;
 
     @Override
     public List<User> findAll() {
@@ -29,18 +35,29 @@ public class UserService implements UserServiceInterface {
     }
 
     @Override
-    public User save(User user) {
+    public User save(User user, MultipartFile profile) throws NoSuchAlgorithmException {
         user.setId(null);
         user.setPermission(Permission.USER);
+        if (profile != null) {
+            String filename = DigestUtils.md5Hex(user.getEmail());
+            URI uri = s3.uploadFile(profile, filename, "profile");
+            user.setProfilePicture(uri);
+        }
         return repository.save(user);
     }
 
     @Override
-    public User update(UUID id, User newUser) {
+    public User update(UUID id, User newUser, MultipartFile profile) {
         User user = findById(id);
         newUser.setId(user.getId());
         newUser.setPermission(user.getPermission());
         newUser.setCreatedAt(user.getCreatedAt());
+        newUser.setProfilePicture(user.getProfilePicture());
+        if (profile != null) {
+            String filename = DigestUtils.md5Hex(user.getEmail());
+            URI uri = s3.uploadFile(profile, filename, "profile");
+            newUser.setProfilePicture(uri);
+        }
         return repository.save(newUser);
     }
 
