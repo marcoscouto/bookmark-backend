@@ -60,6 +60,8 @@ public class User implements Serializable {
     @NotNull
     private Permission permission;
 
+    private Boolean isAccountActive;
+
     private URI profilePicture;
 
     @CreationTimestamp

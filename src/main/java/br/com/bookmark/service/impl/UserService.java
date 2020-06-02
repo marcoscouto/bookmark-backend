@@ -5,7 +5,6 @@ import br.com.bookmark.domain.enums.Permission;
 import br.com.bookmark.exception.NotFoundException;
 import br.com.bookmark.repository.UserRepository;
 import br.com.bookmark.service.UserServiceInterface;
-import br.com.bookmark.utils.UploadImageS3;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Service;
@@ -38,6 +37,7 @@ public class UserService implements UserServiceInterface {
     public User save(User user, MultipartFile profile) throws NoSuchAlgorithmException {
         user.setId(null);
         user.setPermission(Permission.USER);
+        user.setIsAccountActive(false);
         if (profile != null) {
             String filename = DigestUtils.md5Hex(user.getEmail());
             URI uri = s3.uploadFile(profile, filename, "profile");

@@ -4,13 +4,11 @@ import br.com.bookmark.domain.Book;
 import br.com.bookmark.exception.NotFoundException;
 import br.com.bookmark.repository.BookRepository;
 import br.com.bookmark.service.BookServiceInterface;
-import br.com.bookmark.utils.UploadImageS3;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
