@@ -4,5 +4,5 @@ public interface EmailServiceInterface {
 
     void sendAccountConfirmationEmail(String email, String name);
 
-    void sendChangePasswordEmail(String email, String password);
+    void sendChangePasswordEmail(String email, String name, String password);
 }

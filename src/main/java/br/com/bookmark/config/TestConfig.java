@@ -45,8 +45,8 @@ public class TestConfig implements CommandLineRunner {
 
         bookmarkRepository.saveAll(Arrays.asList(bookmark1, bookmark2));
 
-//        emailService.sendAccountConfirmationEmail(user1.getEmail(), user1.getName());
-//        emailService.sendChangePasswordEmail(user1.getEmail(), "BATATA");
+        emailService.sendAccountConfirmationEmail(user1.getEmail(), user1.getName());
+        emailService.sendChangePasswordEmail(user1.getEmail(), user1.getName(), "BATATA");
 
 
     }

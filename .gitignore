@@ -31,4 +31,5 @@ build/
 .vscode/
 
 ### Infos ###
-src/main/resources/**
+src/main/resources/application.properties
+src/main/resources/application-test.properties

@@ -5,28 +5,27 @@ import br.com.bookmark.service.EmailServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailSender;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import java.util.Date;
 
 @Service
 public class EmailService implements EmailServiceInterface {
 
     @Autowired
-    private MailSender mailSender;
+    private JavaMailSender javaMailSender;
 
     @Autowired
-    private JavaMailSender javaMailSender;
+    private SpringTemplateEngine templateEngine;
 
     @Value("${spring.mail.username}")
     private String sender;
-
-    private SimpleMailMessage sm;
 
     @Override
     public void sendAccountConfirmationEmail(String email, String name) {
@@ -38,9 +37,9 @@ public class EmailService implements EmailServiceInterface {
     }
 
     @Override
-    public void sendChangePasswordEmail(String email, String password) {
+    public void sendChangePasswordEmail(String email, String name, String password) {
         try {
-            javaMailSender.send(prepareForgotPasswordEmail(email, password));
+            javaMailSender.send(prepareForgotPasswordEmail(email, name, password));
         } catch (EmailException e) {
             throw new EmailException("O envio de e-mail falhou");
         }
@@ -48,22 +47,13 @@ public class EmailService implements EmailServiceInterface {
 
     private MimeMessage prepareAccountConfirmationEmail(String email, String name) {
         String subject = "[BOOKMARK] Olá " + name + ", confirme já sua conta no Bookmark!";
-        String text = "<html>" +
-                "<body><b style=\"color: red\">Confirme seu email</b> " +
-                "<br>clicando no seguinte link: https://www.google.com.br</body>" +
-                "</html>";
-
+        String text = templateAccountConfirmationEmail(name);
         return prepareEmail(email, subject, text);
     }
 
-    private MimeMessage prepareForgotPasswordEmail(String email, String password) {
+    private MimeMessage prepareForgotPasswordEmail(String email, String name, String password) {
         String subject = "[BOOKMARK] Esqueceu sua senha? Não se preocupe!";
-        String text = "<html>" +
-                "<body><b>Aqui está sua nova senha</b> " +
-                "<br>A sua nova senha é: " + password +
-                "<br>Mas atenção, troque assim que possível!" +
-                "</body></html>";
-
+        String text = templateForgotPasswordEmail(name, password);
         return prepareEmail(email, subject, text);
     }
 
@@ -79,6 +69,19 @@ public class EmailService implements EmailServiceInterface {
         } catch (MessagingException e) {
             throw new EmailException("O envio de e-mail falhou");
         }
+    }
+
+    private String templateAccountConfirmationEmail(String name) {
+        Context context = new Context();
+        context.setVariable("name", name);
+        return templateEngine.process("AccountConfirmationMail.html", context);
+    }
+
+    private String templateForgotPasswordEmail(String name, String password) {
+        Context context = new Context();
+        context.setVariable("name", name);
+        context.setVariable("password", password);
+        return templateEngine.process("ForgotPasswordMail.html", context);
     }
 
 }
