@@ -24,19 +24,19 @@ public class UserResource {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<List<User>> findAll(){
+    public ResponseEntity<List<User>> findAll() {
         List<User> response = userService.findAll();
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> findById(@PathVariable UUID id){
+    public ResponseEntity<User> findById(@PathVariable UUID id) {
         User response = userService.findById(id);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping
-    public ResponseEntity<User> save(@RequestParam String user, @RequestParam(required = false) MultipartFile profile){
+    public ResponseEntity<User> save(@RequestParam String user, @RequestParam(required = false) MultipartFile profile) {
         try {
             ObjectMapper obj = new ObjectMapper();
             SignUp response = obj.readValue(user, SignUp.class);
@@ -47,20 +47,26 @@ public class UserResource {
         }
     }
 
+    @PostMapping("/activeaccount/{id}")
+    public ResponseEntity<Void> save(@PathVariable UUID id) {
+        userService.activeAccount(id);
+        return ResponseEntity.ok().build();
+    }
+
     @PutMapping("/{id}")
-    public ResponseEntity<User> update(@PathVariable UUID id, @RequestParam String user, @RequestParam(required = false) MultipartFile profile){
+    public ResponseEntity<User> update(@PathVariable UUID id, @RequestParam String user, @RequestParam(required = false) MultipartFile profile) {
         try {
             ObjectMapper obj = new ObjectMapper();
             User response = obj.readValue(user, User.class);
             response = userService.update(id, response, profile);
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+            return ResponseEntity.ok(response);
         } catch (JsonProcessingException e) {
             return ResponseEntity.status(500).build();
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable UUID id){
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
         userService.delete(id);
         return ResponseEntity.ok().build();
     }

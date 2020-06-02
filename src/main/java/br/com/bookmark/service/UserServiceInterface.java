@@ -21,4 +21,6 @@ public interface UserServiceInterface {
 
     User findByEmail(String email);
 
+    void activeAccount(UUID id);
+
 }

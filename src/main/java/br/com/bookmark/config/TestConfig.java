@@ -31,7 +31,7 @@ public class TestConfig implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
         User user1 = new User(null, "Marcos Couto", "marcosmartinellicouto@gmail.com", "123456", null, LocalDate.of(1990, 9, 14), Permission.ADMIN, true, null, null, null, null);
-        User user2 = new User(null, "Vinicius Couto", "vinicius@gmail.com", "123456", null, LocalDate.of(1990, 9, 14), Permission.USER, true, null, null, null, null);
+        User user2 = new User(null, "Vinicius Couto", "vinicius@gmail.com", "123456", null, LocalDate.of(1990, 9, 14), Permission.USER, false, null, null, null, null);
 
         userRepository.saveAll(Arrays.asList(user1, user2));
 
@@ -45,8 +45,8 @@ public class TestConfig implements CommandLineRunner {
 
         bookmarkRepository.saveAll(Arrays.asList(bookmark1, bookmark2));
 
-        emailService.sendAccountConfirmationEmail(user1.getEmail(), user1.getName());
-        emailService.sendChangePasswordEmail(user1.getEmail(), user1.getName(), "BATATA");
+//        emailService.sendAccountConfirmationEmail(user1.getEmail(), user1.getName());
+//        emailService.sendChangePasswordEmail(user1.getEmail(), user1.getName(), "BATATA");
 
 
     }

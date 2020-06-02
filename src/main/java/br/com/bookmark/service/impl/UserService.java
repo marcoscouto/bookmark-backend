@@ -53,6 +53,7 @@ public class UserService implements UserServiceInterface {
         newUser.setPermission(user.getPermission());
         newUser.setCreatedAt(user.getCreatedAt());
         newUser.setProfilePicture(user.getProfilePicture());
+        newUser.setUpdatedAt(null);
         if (profile != null) {
             String filename = DigestUtils.md5Hex(user.getEmail());
             URI uri = s3.uploadFile(profile, filename, "profile");
@@ -72,4 +73,14 @@ public class UserService implements UserServiceInterface {
         return repository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException("User not founded. Email: " + email));
     }
+
+    @Override
+    public void activeAccount(UUID id) {
+        User user = findById(id);
+        user.setIsAccountActive(true);
+        user.setUpdatedAt(null);
+        repository.save(user);
+    }
+
+
 }
