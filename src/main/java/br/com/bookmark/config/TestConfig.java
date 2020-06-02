@@ -9,6 +9,7 @@ import br.com.bookmark.repository.BookRepository;
 import br.com.bookmark.repository.BookmarkRepository;
 import br.com.bookmark.repository.UserRepository;
 import br.com.bookmark.service.impl.EmailService;
+import br.com.bookmark.service.impl.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
@@ -47,6 +48,8 @@ public class TestConfig implements CommandLineRunner {
 
 //        emailService.sendAccountConfirmationEmail(user1.getEmail(), user1.getName());
 //        emailService.sendChangePasswordEmail(user1.getEmail(), user1.getName(), "BATATA");
+
+        System.out.println(UserService.generateNewPassword());
 
 
     }

@@ -7,12 +7,15 @@ import br.com.bookmark.repository.UserRepository;
 import br.com.bookmark.service.UserServiceInterface;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 @Service
@@ -21,6 +24,7 @@ public class UserService implements UserServiceInterface {
 
     private final UserRepository repository;
     private final UploadImageS3 s3;
+    private final EmailService emailService;
 
     @Override
     public List<User> findAll() {
@@ -33,6 +37,7 @@ public class UserService implements UserServiceInterface {
                 .orElseThrow(() -> new NotFoundException("User not founded. Id: " + id ));
     }
 
+    @Transactional
     @Override
     public User save(User user, MultipartFile profile) throws NoSuchAlgorithmException {
         user.setId(null);
@@ -43,9 +48,11 @@ public class UserService implements UserServiceInterface {
             URI uri = s3.uploadFile(profile, filename, "profile");
             user.setProfilePicture(uri);
         }
+        sendAccountConfirmationEmail(user.getEmail(),user.getName());
         return repository.save(user);
     }
 
+    @Transactional
     @Override
     public User update(UUID id, User newUser, MultipartFile profile) {
         User user = findById(id);
@@ -82,5 +89,27 @@ public class UserService implements UserServiceInterface {
         repository.save(user);
     }
 
+    @Transactional
+    @Override
+    public void forgotPassword(String email){
+        User user = findByEmail(email);
+        String newPassword = generateNewPassword();
+        user.setPassword(newPassword);
+        user.setUpdatedAt(null);
+        sendForgotPasswordEmail(user.getEmail(), user.getName(), newPassword);
+        repository.save(user);
+    }
+
+    private void sendAccountConfirmationEmail(String email, String name){
+        emailService.sendAccountConfirmationEmail(email, name);
+    }
+
+    private void sendForgotPasswordEmail(String email, String name, String password){
+        emailService.sendChangePasswordEmail(email, name, password);
+    }
+
+    public static String generateNewPassword(){
+        return RandomStringUtils.randomAlphanumeric(15);
+    }
 
 }

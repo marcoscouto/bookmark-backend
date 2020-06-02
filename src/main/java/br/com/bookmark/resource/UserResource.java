@@ -2,6 +2,7 @@ package br.com.bookmark.resource;
 
 import br.com.bookmark.domain.Book;
 import br.com.bookmark.domain.User;
+import br.com.bookmark.domain.dto.ForgotPassword;
 import br.com.bookmark.domain.dto.SignUp;
 import br.com.bookmark.service.impl.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -48,8 +49,14 @@ public class UserResource {
     }
 
     @PostMapping("/activeaccount/{id}")
-    public ResponseEntity<Void> save(@PathVariable UUID id) {
+    public ResponseEntity<Void> activeAccount(@PathVariable UUID id) {
         userService.activeAccount(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/forgotpassword")
+    public ResponseEntity<Void> forgotPassword(@RequestBody ForgotPassword forgotPassword) {
+        userService.forgotPassword(forgotPassword.getEmail());
         return ResponseEntity.ok().build();
     }
 

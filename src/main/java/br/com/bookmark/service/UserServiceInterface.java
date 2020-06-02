@@ -23,4 +23,6 @@ public interface UserServiceInterface {
 
     void activeAccount(UUID id);
 
+    void forgotPassword(String email);
+
 }

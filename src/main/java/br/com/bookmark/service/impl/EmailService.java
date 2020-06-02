@@ -32,7 +32,7 @@ public class EmailService implements EmailServiceInterface {
         try {
             javaMailSender.send(prepareAccountConfirmationEmail(email, name));
         } catch (EmailException e) {
-            throw new EmailException("O envio de e-mail falhou");
+            throw new EmailException("Email service failed");
         }
     }
 
@@ -41,7 +41,7 @@ public class EmailService implements EmailServiceInterface {
         try {
             javaMailSender.send(prepareForgotPasswordEmail(email, name, password));
         } catch (EmailException e) {
-            throw new EmailException("O envio de e-mail falhou");
+            throw new EmailException("Email service failed");
         }
     }
 
@@ -57,7 +57,7 @@ public class EmailService implements EmailServiceInterface {
         return prepareEmail(email, subject, text);
     }
 
-    public MimeMessage prepareEmail(String email, String subject, String text) {
+    private MimeMessage prepareEmail(String email, String subject, String text) {
         MimeMessage message = javaMailSender.createMimeMessage();
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message);
@@ -67,7 +67,7 @@ public class EmailService implements EmailServiceInterface {
             helper.setText(text, true);
             return message;
         } catch (MessagingException e) {
-            throw new EmailException("O envio de e-mail falhou");
+            throw new EmailException("Email service failed");
         }
     }
 
