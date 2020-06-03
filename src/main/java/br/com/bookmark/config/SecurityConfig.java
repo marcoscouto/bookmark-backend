@@ -1,6 +1,9 @@
-package br.com.bookmark.security;
+package br.com.bookmark.config;
 
 import br.com.bookmark.domain.enums.Permission;
+import br.com.bookmark.security.JWTAuthenticationFilter;
+import br.com.bookmark.security.JWTAuthorizationFilter;
+import br.com.bookmark.security.JWTUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -26,7 +29,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JWTUtils jwtUtils;
 
-    private final String[] PUBLIC_MATCHERS = {"/users/activeaccount/**"};
+    private final String[] PUBLIC_MATCHERS = {"/users/activeaccount/**", "/users/forgotpassword"};
 
     private final String[] USER_MATCHERS = {"/books/**", "/bookmarks/**"};
 

@@ -52,8 +52,6 @@ public class TestConfig implements CommandLineRunner {
 //        emailService.sendAccountConfirmationEmail(user1.getEmail(), user1.getName());
 //        emailService.sendChangePasswordEmail(user1.getEmail(), user1.getName(), "BATATA");
 
-
-
     }
 
 

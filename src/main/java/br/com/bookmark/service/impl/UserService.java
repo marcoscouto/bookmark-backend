@@ -58,14 +58,15 @@ public class UserService implements UserServiceInterface {
         newUser.setId(user.getId());
         newUser.setPermission(user.getPermission());
         newUser.setCreatedAt(user.getCreatedAt());
-        newUser.setProfilePicture(user.getProfilePicture());
         newUser.setUpdatedAt(null);
+        newUser.setProfilePicture(user.getProfilePicture());
+        newUser.setIsAccountActive(user.getIsAccountActive());
         if (profile != null) {
             String filename = DigestUtils.md5Hex(user.getEmail());
             URI uri = s3.uploadFile(profile, filename, "profile");
             newUser.setProfilePicture(uri);
         }
-        if(newUser.getPassword() != null){
+        if (newUser.getPassword() != null) {
             newUser.setPassword(encoder.encode(newUser.getPassword()));
         }
         return repository.save(newUser);
