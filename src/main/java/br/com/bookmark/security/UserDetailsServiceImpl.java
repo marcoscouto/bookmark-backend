@@ -1,6 +1,8 @@
 package br.com.bookmark.security;
 
 import br.com.bookmark.domain.User;
+import br.com.bookmark.exception.NotFoundException;
+import br.com.bookmark.repository.UserRepository;
 import br.com.bookmark.service.impl.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,11 +14,14 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final UserService userService;
+    private final UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userService.findByEmail(email);
+        User user = userRepository
+                .findByEmail(email)
+                .orElseThrow(() -> new NotFoundException("User not founded. E-mail: " + email));
+
         return org.springframework.security.core.userdetails.User
                 .builder()
                 .username(user.getEmail())

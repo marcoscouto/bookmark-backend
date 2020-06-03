@@ -60,6 +60,7 @@ public class User implements Serializable {
     @NotNull
     private Permission permission;
 
+    @NotNull
     private Boolean isAccountActive;
 
     private URI profilePicture;
