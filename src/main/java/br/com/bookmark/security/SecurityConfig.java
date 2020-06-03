@@ -26,7 +26,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JWTUtils jwtUtils;
 
-    private final String[] PUBLIC_MATCHERS = {};
+    private final String[] PUBLIC_MATCHERS = {"/users/activeaccount/**"};
 
     private final String[] USER_MATCHERS = {"/books/**", "/bookmarks/**"};
 
