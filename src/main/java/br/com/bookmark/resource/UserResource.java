@@ -1,6 +1,5 @@
 package br.com.bookmark.resource;
 
-import br.com.bookmark.domain.Book;
 import br.com.bookmark.domain.User;
 import br.com.bookmark.domain.dto.ForgotPassword;
 import br.com.bookmark.domain.dto.SignUp;

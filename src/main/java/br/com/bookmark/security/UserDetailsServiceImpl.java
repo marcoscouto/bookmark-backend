@@ -3,7 +3,6 @@ package br.com.bookmark.security;
 import br.com.bookmark.domain.User;
 import br.com.bookmark.exception.NotFoundException;
 import br.com.bookmark.repository.UserRepository;
-import br.com.bookmark.service.impl.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
