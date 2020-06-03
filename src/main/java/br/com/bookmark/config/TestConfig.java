@@ -11,9 +11,12 @@ import br.com.bookmark.repository.UserRepository;
 import br.com.bookmark.service.impl.EmailService;
 import br.com.bookmark.service.impl.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -28,11 +31,13 @@ public class TestConfig implements CommandLineRunner {
     private final BookmarkRepository bookmarkRepository;
     private final EmailService emailService;
 
+    private BCryptPasswordEncoder bc = new BCryptPasswordEncoder();
+
     @Override
     public void run(String... args) throws Exception {
 
-        User user1 = new User(null, "Marcos Couto", "marcosmartinellicouto@gmail.com", "123456", null, LocalDate.of(1990, 9, 14), Permission.ADMIN, true, null, null, null, null);
-        User user2 = new User(null, "Vinicius Couto", "vinicius@gmail.com", "123456", null, LocalDate.of(1990, 9, 14), Permission.USER, false, null, null, null, null);
+        User user1 = new User(null, "Marcos Couto", "marcosmartinellicouto@gmail.com", bc.encode("123456"), null, LocalDate.of(1990, 9, 14), Permission.ADMIN, true, null, null, null, null);
+        User user2 = new User(null, "Vinicius Couto", "vinicius@gmail.com", bc.encode("123456"), null, LocalDate.of(1990, 9, 14), Permission.USER, false, null, null, null, null);
 
         userRepository.saveAll(Arrays.asList(user1, user2));
 
@@ -49,7 +54,6 @@ public class TestConfig implements CommandLineRunner {
 //        emailService.sendAccountConfirmationEmail(user1.getEmail(), user1.getName());
 //        emailService.sendChangePasswordEmail(user1.getEmail(), user1.getName(), "BATATA");
 
-        System.out.println(UserService.generateNewPassword());
 
 
     }

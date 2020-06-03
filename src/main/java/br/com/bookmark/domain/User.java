@@ -47,7 +47,7 @@ public class User implements Serializable {
     @JsonIgnore
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotBlank
-    @Size(min = 6, max = 50)
+    @Size(min = 6, max = 255)
     private String password;
 
     private String gender;

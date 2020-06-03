@@ -8,6 +8,10 @@ import br.com.bookmark.service.UserServiceInterface;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,6 +29,7 @@ public class UserService implements UserServiceInterface {
     private final UserRepository repository;
     private final UploadImageS3 s3;
     private final EmailService emailService;
+    private PasswordEncoder bCryptPasswordEncoder;
 
     @Override
     public List<User> findAll() {
@@ -34,7 +39,7 @@ public class UserService implements UserServiceInterface {
     @Override
     public User findById(UUID id) {
         return repository.findById(id)
-                .orElseThrow(() -> new NotFoundException("User not founded. Id: " + id ));
+                .orElseThrow(() -> new NotFoundException("User not founded. Id: " + id));
     }
 
     @Transactional
@@ -43,12 +48,13 @@ public class UserService implements UserServiceInterface {
         user.setId(null);
         user.setPermission(Permission.USER);
         user.setIsAccountActive(false);
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         if (profile != null) {
             String filename = DigestUtils.md5Hex(user.getEmail());
             URI uri = s3.uploadFile(profile, filename, "profile");
             user.setProfilePicture(uri);
         }
-        sendAccountConfirmationEmail(user.getEmail(),user.getName());
+        sendAccountConfirmationEmail(user.getEmail(), user.getName());
         return repository.save(user);
     }
 
@@ -65,6 +71,9 @@ public class UserService implements UserServiceInterface {
             String filename = DigestUtils.md5Hex(user.getEmail());
             URI uri = s3.uploadFile(profile, filename, "profile");
             newUser.setProfilePicture(uri);
+        }
+        if(newUser.getPassword() != null){
+            newUser.setPassword(bCryptPasswordEncoder.encode(newUser.getPassword()));
         }
         return repository.save(newUser);
     }
@@ -91,24 +100,24 @@ public class UserService implements UserServiceInterface {
 
     @Transactional
     @Override
-    public void forgotPassword(String email){
+    public void forgotPassword(String email) {
         User user = findByEmail(email);
         String newPassword = generateNewPassword();
-        user.setPassword(newPassword);
+        user.setPassword(bCryptPasswordEncoder.encode(newPassword));
         user.setUpdatedAt(null);
         sendForgotPasswordEmail(user.getEmail(), user.getName(), newPassword);
         repository.save(user);
     }
 
-    private void sendAccountConfirmationEmail(String email, String name){
+    private void sendAccountConfirmationEmail(String email, String name) {
         emailService.sendAccountConfirmationEmail(email, name);
     }
 
-    private void sendForgotPasswordEmail(String email, String name, String password){
+    private void sendForgotPasswordEmail(String email, String name, String password) {
         emailService.sendChangePasswordEmail(email, name, password);
     }
 
-    public static String generateNewPassword(){
+    public static String generateNewPassword() {
         return RandomStringUtils.randomAlphanumeric(15);
     }
 
