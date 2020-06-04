@@ -19,7 +19,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 
 @Configuration
-@Profile("test")
+@Profile({"test", "dev"})
 @RequiredArgsConstructor
 public class TestConfig implements CommandLineRunner {
 
