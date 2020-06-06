@@ -42,7 +42,7 @@ public class JWTUtils {
     }
 
     private Date getExpirationDate() {
-        return new Date(System.currentTimeMillis() + expiration);
+        return new Date(System.currentTimeMillis() + (expiration * 1000));
     }
 
     private Claims getClaims(String token) {
