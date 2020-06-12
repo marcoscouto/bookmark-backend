@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.UUID;
 
@@ -36,15 +35,9 @@ public class UserResource {
     }
 
     @PostMapping
-    public ResponseEntity<User> save(@RequestParam String user, @RequestParam(required = false) MultipartFile profile) {
-        try {
-            ObjectMapper obj = new ObjectMapper();
-            SignUp response = obj.readValue(user, SignUp.class);
-            User userResponse = userService.save(new User(response), profile);
-            return ResponseEntity.status(HttpStatus.CREATED).body(userResponse);
-        } catch (JsonProcessingException | NoSuchAlgorithmException e) {
-            return ResponseEntity.status(500).build();
-        }
+    public ResponseEntity<User> signUp(@RequestBody SignUp signUp) {
+        User userResponse = userService.save(new User(signUp));
+        return ResponseEntity.status(HttpStatus.CREATED).body(userResponse);
     }
 
     @PostMapping("/activeaccount/{id}")

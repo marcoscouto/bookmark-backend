@@ -38,18 +38,14 @@ public class UserService implements UserServiceInterface {
     }
 
     @Override
-    public User save(User user, MultipartFile profile) throws NoSuchAlgorithmException {
+    public User save(User user){
         user.setId(null);
         user.setPermission(Permission.USER);
         user.setIsAccountActive(false);
         user.setPassword(encoder.encode(user.getPassword()));
-        if (profile != null) {
-            String filename = DigestUtils.md5Hex(user.getEmail());
-            URI uri = s3.uploadFile(profile, filename, "profile");
-            user.setProfilePicture(uri);
-        }
-        sendAccountConfirmationEmail(user.getEmail(), user.getName());
-        return repository.save(user);
+        user = repository.save(user);
+        sendAccountConfirmationEmail(user.getEmail(), user.getName(), user.getId());
+        return user;
     }
 
     @Override
@@ -102,8 +98,8 @@ public class UserService implements UserServiceInterface {
         repository.save(user);
     }
 
-    private void sendAccountConfirmationEmail(String email, String name) {
-        emailService.sendAccountConfirmationEmail(email, name);
+    private void sendAccountConfirmationEmail(String email, String name, UUID id) {
+        emailService.sendAccountConfirmationEmail(email, name, id);
     }
 
     private void sendForgotPasswordEmail(String email, String name, String password) {

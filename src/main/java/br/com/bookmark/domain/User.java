@@ -43,7 +43,6 @@ public class User implements Serializable {
     @Column(unique = true)
     private String email;
 
-    @JsonIgnore
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotBlank
     @Size(min = 6, max = 255)
@@ -76,8 +75,8 @@ public class User implements Serializable {
     private List<Bookmark> bookmarks;
 
     public User(SignUp signUp){
-        this.setName(signUp.getName());
-        this.setEmail(signUp.getEmail());
-        this.setPassword(signUp.getPassword());
+        this.name = signUp.getName();
+        this.email = signUp.getEmail();
+        this.password = signUp.getPassword();
     }
 }

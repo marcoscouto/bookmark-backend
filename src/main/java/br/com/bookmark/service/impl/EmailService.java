@@ -12,6 +12,7 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.util.UUID;
 
 @Service
 public class EmailService implements EmailServiceInterface {
@@ -26,9 +27,9 @@ public class EmailService implements EmailServiceInterface {
     private String sender;
 
     @Override
-    public void sendAccountConfirmationEmail(String email, String name) {
+    public void sendAccountConfirmationEmail(String email, String name, UUID id) {
         try {
-            javaMailSender.send(prepareAccountConfirmationEmail(email, name));
+            javaMailSender.send(prepareAccountConfirmationEmail(email, name, id));
         } catch (EmailException e) {
             throw new EmailException("Email service failed");
         }
@@ -43,9 +44,9 @@ public class EmailService implements EmailServiceInterface {
         }
     }
 
-    private MimeMessage prepareAccountConfirmationEmail(String email, String name) {
+    private MimeMessage prepareAccountConfirmationEmail(String email, String name, UUID id) {
         String subject = "[BOOKMARK] Olá " + name + ", confirme já sua conta no Bookmark!";
-        String text = templateAccountConfirmationEmail(name);
+        String text = templateAccountConfirmationEmail(name, id);
         return prepareEmail(email, subject, text);
     }
 
@@ -69,9 +70,10 @@ public class EmailService implements EmailServiceInterface {
         }
     }
 
-    private String templateAccountConfirmationEmail(String name) {
+    private String templateAccountConfirmationEmail(String name, UUID id) {
         Context context = new Context();
         context.setVariable("name", name);
+        context.setVariable("id", id);
         return templateEngine.process("AccountConfirmationMail.html", context);
     }
 

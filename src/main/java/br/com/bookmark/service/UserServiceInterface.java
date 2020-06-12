@@ -13,7 +13,7 @@ public interface UserServiceInterface {
 
     User findById(UUID id);
 
-    User save(User user, MultipartFile profile) throws NoSuchAlgorithmException;
+    User save(User user);
 
     User update(UUID id, User user, MultipartFile profile);
 

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -32,7 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JWTUtils jwtUtils;
 
-    private final String[] PUBLIC_MATCHERS = {"/users/activeaccount/**", "/users/forgotpassword"};
+    private final String[] PUBLIC_POST_MATCHERS = {"/users/**"};
 
     private final String[] USER_MATCHERS = {"/books/**", "/bookmarks/**"};
 
@@ -43,7 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .cors().and().csrf().disable()
                 .authorizeRequests()
-                .antMatchers(PUBLIC_MATCHERS).permitAll()
+                .antMatchers(HttpMethod.POST, PUBLIC_POST_MATCHERS).permitAll()
                 .antMatchers(USER_MATCHERS).hasAnyRole(Permission.USER.toString(), Permission.ADMIN.toString())
                 .antMatchers(ADMIN_MATCHERS).hasRole(Permission.ADMIN.toString())
                 .anyRequest().authenticated()
